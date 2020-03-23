@@ -13,9 +13,10 @@
 
 	<c:if test="${Auth != null }"> <!-- 로그인 상태 -->
 		<a href="changePwd.do">[비밀번호 변경]</a>
-		<a href="">[게시판 작성]</a>		
+		<a href="add.do">[게시판 작성]</a>		
+		<a href="list.do">[게시판 리스트]</a>
 		<a href="logout.do">[로그아웃]</a>
-		[${Auth }]님. 로그인한 상태
+		${Auth.id }[${Auth.name }]님. 로그인한 상태
 	</c:if>
 	<c:if test="${Auth == null }"><!-- 로그아웃 상태 -->
 		<a href="join.do">[회원가입]</a>

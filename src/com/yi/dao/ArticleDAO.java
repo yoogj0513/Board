@@ -44,10 +44,9 @@ public class ArticleDAO {
 		PreparedStatement pstmt = null;
 		
 		try {
-			String sql = "insert into article_content values (?,?)";
+			String sql = "insert into article_content values (last_insert_id(),?)";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, article.getArticleNo());
-			pstmt.setString(2, article.getContent());
+			pstmt.setString(1, article.getContent());
 			pstmt.executeUpdate();
 		} finally {
 			JDBCUtil.close(pstmt);
@@ -60,7 +59,7 @@ public class ArticleDAO {
 		ResultSet rs = null;
 		
 		try {
-			String sql = "select * from article";
+			String sql = "select * from article a join article_content c on a.article_no = c.article_no";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
@@ -89,33 +88,82 @@ public class ArticleDAO {
 		try {
 			String sql = "update article set title = ? , moddate = ?, read_cnt = ? where article_no = ?";
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, article.getTitle());
+			pstmt.setTimestamp(2, new Timestamp(article.getModdate().getTime()));
+			pstmt.setInt(3, article.getReadCnt());
+			pstmt.setInt(4, article.getArticleNo());
+			pstmt.executeUpdate();
 		} finally {
 			JDBCUtil.close(pstmt);
 		}
 	}
 	
 	//updateContent (content만 수정)
-	public void updateContent(Connection conn, Article article) {
+	public void updateContent(Connection conn, Article article) throws SQLException {
+		PreparedStatement pstmt = null;
 		
+		try {
+			String sql = "update article_content set content = ? where article_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, article.getContent());
+			pstmt.setInt(2, article.getArticleNo());
+			pstmt.executeUpdate();
+		} finally {
+			JDBCUtil.close(pstmt);
+		}
 	}
 	
 	//deleteArticle
-	public void deleteArticle(Connection conn, Article article) {
-		
+	public void deleteArticle(Connection conn, Article article) throws SQLException {
+		PreparedStatement pstmt = null;
+		try {
+			String sql = "delete from article where article_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, article.getArticleNo());
+			pstmt.executeUpdate();
+		} finally {
+			JDBCUtil.close(pstmt);
+		}
 	}
 	
 	//deleteContent
-	public void deleteContent(Connection conn, Article article) {
-		
+	public void deleteContent(Connection conn, Article article) throws SQLException {
+		PreparedStatement pstmt = null;
+		try {
+			String sql = "delete from article_content where article_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, article.getArticleNo());
+			pstmt.executeUpdate();
+		} finally {
+			JDBCUtil.close(pstmt);
+		}
 	}
 	
 	//selectArticleByNo
-	public Article selectArticleByNo(Connection conn, int no) {
-		return null;
-	}
-	
-	//selectContentByNo
-	public Article selectContentByNo(Connection conn, int no) {
+	public Article selectArticleByNo(Connection conn, int no) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			String sql = "select * from article a join article_content c on a.article_no = c.article_no where a.article_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				Article articel = new Article(rs.getInt(1), 
+											rs.getString(2), 
+											rs.getString(3), 
+											rs.getString(4), 
+											rs.getTimestamp(5), 
+											rs.getTimestamp(6), 
+											rs.getInt(7),
+											rs.getString(9));
+				return articel;
+			}
+		} finally {
+			JDBCUtil.close(rs);
+			JDBCUtil.close(pstmt);
+		}
 		return null;
 	}
 }

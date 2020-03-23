@@ -7,6 +7,26 @@
   	<servlet-class>com.yi.jdbc.DBCPInit</servlet-class>
   	<load-on-startup>1</load-on-startup>
   </servlet>
+  
+  <filter>
+  	<filter-name>CharacterEncodingFilter</filter-name>
+  	<filter-class>com.yi.util.CharacterEncodingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>CharacterEncodingFilter</filter-name>
+  	<url-pattern>/*</url-pattern> <!-- 모든 커맨드가 거쳐가도록 설정 -->
+  </filter-mapping>
+  
+  <filter>
+  	<filter-name>LoginFilter</filter-name>
+  	<filter-class>com.yi.util.LoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>LoginFilter</filter-name>
+  	<url-pattern>/add.do</url-pattern>
+  	<url-pattern>/list.do</url-pattern>
+  </filter-mapping>
+  
   <servlet>
   	<servlet-name>ControllerUsingURI</servlet-name> <!-- 클래스 이름과 같은 변수 -->
   	<servlet-class>com.yi.mvc.ControllerUsingURI</servlet-class> <!-- 클래스 위치 -->

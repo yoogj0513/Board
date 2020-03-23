@@ -3,6 +3,7 @@ package com.yi.dao.test;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -38,11 +39,34 @@ public class ArticleDAOTest {
 		JDBCUtil.close(conn);
 	}
 	
-	@Test
+	//@Test
 	public void testInsert() throws SQLException {
-		Article article = new Article(1, "test1", "test", "제목1", new Date(), new Date(), 0, "내용 1");
+		Article article = new Article(2, "test2", "test2", "제목2", new Date(), new Date(), 0, "내용 2");
 		
 		dao.insertArticle(conn, article);
 		dao.insertContent(conn, article);
+	}
+	
+	//@Test
+	public void testList() throws SQLException {
+		List<Article> list = dao.listArticle(conn);
+		for(Article art : list) {
+			System.out.println(art);
+		}
+	}
+	
+	//@Test
+	public void testUpdate() throws SQLException {
+		Article article = new Article(2, null, null, "수정된 게시글2", null, new Date(), 1, "수정 내용2");
+		dao.updateAritcle(conn, article);
+		dao.updateContent(conn, article);
+	}
+	
+	//@Test
+	public void testDelete() throws SQLException {
+		Article article = new Article();
+		article.setArticleNo(1);
+		dao.deleteArticle(conn, article);
+		dao.deleteContent(conn, article);
 	}
 }

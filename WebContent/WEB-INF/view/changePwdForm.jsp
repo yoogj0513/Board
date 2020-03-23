@@ -16,7 +16,7 @@
 	<form action="changePwd.do" method="post">
 		<p>
 			<label>현재 암호</label><br>
-			<input type="hidden" name="id" value="${Auth }"/>
+			<input type="hidden" name="id" value="${Auth.id }"/>
 			<input type="password" name="password"/>
 			<c:if test="${notMatch != null}">
 				<span class="error">현재 암호가 일치하지 않습니다.</span>

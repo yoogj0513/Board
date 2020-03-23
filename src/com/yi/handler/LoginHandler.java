@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import com.yi.dao.MemberDAO;
 import com.yi.jdbc.JDBCUtil;
+import com.yi.model.Auth;
 import com.yi.model.Member;
 import com.yi.mvc.CommandHandler;
 
@@ -36,8 +37,9 @@ public class LoginHandler implements CommandHandler {
 				
 				// 자바에서는 아래와 같이 불러와야함
 				//로그인
+				Auth auth = new Auth(id, member.getName());
 				HttpSession session = req.getSession();
-				session.setAttribute("Auth", id);
+				session.setAttribute("Auth", auth); //id, name //id, name, admin 등 추가 저장 가능 // 클래스에 저장해서 넘긴다
 				
 				return "index.jsp"; //홈으로 이동
 			} catch (Exception e) {
