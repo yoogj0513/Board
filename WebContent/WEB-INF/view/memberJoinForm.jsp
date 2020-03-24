@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 <style>
 	fieldset {
-		width: 480px;
+		width: 600px;
 	}
 	
 	label {
@@ -20,6 +20,10 @@
 		color: red;
 		font-size: 8px;
 	}
+	
+	#btn1 {
+		margin-left: 10px;
+	}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
@@ -31,7 +35,7 @@
 			var idReg = /^[a-z0-9]{6,15}$/i; //영어, 숫자 6~1
 			var id = $("input[name='id']").val();
 			if(idReg.test(id) == false || id == "") {
-				$("input[name='id']").next().css("display", "inline");
+				$("input[name='id']").nextAll(".error").css("display", "inline");
 				return false; // 서버 전송 막음
 			}
 			
@@ -56,6 +60,19 @@
 			} 
 
 		})
+		
+		$("#btn1").click(function() {
+			var id = $("#id").val();
+			$.ajax({
+				url: "",
+				type: "get",
+				data: {"id":id},
+				dataType:"json",
+				success:function(res){
+					console.log(res);
+				}
+			})
+		})
 	})
 </script>
 </head>
@@ -64,7 +81,7 @@
 		<fieldset>			
 			<p>
 				<label>아이디</label>
-				<input type="text" name="id"/>
+				<input type="text" name="id" id="id"/><button id="btn1">아이디 중복</button>
 				<span class="error">ID(영어, 숫자 6~15자)를 입력하세요.</span>
 			</p>
 			<p>
